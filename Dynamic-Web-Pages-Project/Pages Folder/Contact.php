@@ -1,6 +1,91 @@
-	<h1 id="request">Movie Premier Booking Form</h1>
+<h1 id="request">Movie Premier Booking Form</h1>
 <p class="req">Interested in Movie Premier at NY Cinema? Please complete and submit the following form to the Booking Office. One of our representatives will send you an information package tailored to the field(s) of Premier that interest you. Please indicate whether you would like additional information or not</p>
 
+<?php
+// Initialize variables to null.
+$NameError="";
+$EmailError="";
+$GenderError="";
+$WebsiteError="";
+//On Submitting form, below function will execute
+//Submit Scope starts from here
+if(isset($_POST['Submit'])){
+	
+ if(empty($_POST["Name"])){
+$NameError="Name is Required";
+ }
+ else{
+$Name=Test_User_Input($_POST["Name"]);
+// check Name only contains letters and whitespace
+if(!preg_match("/^[A-Za-z\. ]*$/",$Name)){
+$NameError="Only Letters and white sapace are allowed";
+}
+ }
+  if(empty($_POST["Email"])){
+$EmailError="Email is Required";
+ }
+ else{
+$Email=Test_User_Input($_POST["Email"]);
+// check if e-mail address syntax is valid or not
+if(!preg_match("/[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9._-]{3,}[.]{1}[a-zA-Z0-9._-]{2,}/",$Email))
+{
+$EmailError="Invalid Email Format";
+}
+}
+  if(empty($_POST["Gender"])){
+$GenderError="Gender is Required";
+ }
+ else{
+$Gender=Test_User_Input($_POST["Gender"]);
+
+}
+  if(empty($_POST["Website"])){
+$WebsiteError="Website is Required";
+ }
+ else{
+$Website=Test_User_Input($_POST["Website"]);
+ // check Website address syntax is valid or not
+
+if(!preg_match("/(https:|ftp:)\/\/+[a-zA-Z0-9.\-_\/?\$=&\#\~`!]+\.[a-zA-Z0-9.\-_\/?\$=&\#\~`!]*/",$Website)){
+$WebsiteError="Invalid Webside Address Format";	
+}
+}
+if(!empty($_POST["Name"])&&!empty($_POST["Email"])&&!empty($_POST["Gender"])&&!empty($_POST["Website"])){
+if((preg_match("/^[A-Za-z\. ]*$/",$Name)==true)&&(preg_match("/[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9._-]{3,}[.]{1}[a-zA-Z0-9._-]{2,}/",$Email)==true)&&(preg_match("/(https:|ftp:)\/\/+[a-zA-Z0-9.\-_\/?\$=&\#\~`!]+\.[a-zA-Z0-9.\-_\/?\$=&\#\~`!]*/",$Website)==true))
+{
+/*echo "Name:".ucwords ($_POST["Name"])."<br>";
+echo "Email: {$_POST["Email"]}<br>";
+echo "Gender: {$_POST["Gender"]}<br>";
+echo "Website: {$_POST["Website"]}<br>";
+echo "Comments: {$_POST["Comment"]}<br>"; */
+$emailTo="mail@gmail.com";
+ $subject="Contact Form";
+ $body=" Name : ".$_POST["Name"]."
+ Email : ".$_POST["Email"].
+ "
+ Gender : ". $_POST["Gender"]."
+ Website : ".$_POST["Website"].
+ "
+ Message :: ".$_POST["Comment"];
+ $Sender="From:mail@gmail.com";
+     if (mail($emailTo, $subject, $body, $Sender)) {
+                echo "<h2>".$_POST['Name'].",  Your Message Submitted Successfully</h2> <br>";
+                    } else {
+                echo "<h2>".$_POST['Name']." Something Went Wrong :/ Try Again !</h2> <br>";
+                    }
+     
+}else{
+	echo '<span class="Error">* Please Complete & Correct your Form then Try Again*<br><br></span>';
+}
+}
+}//Submit Scope  Ends here
+//Function to get and throw data to each of the field final varriable like Name / Gender etc.
+function Test_User_Input($Data){
+	return $Data;
+}
+
+//php code ends here
+?>
 
 <style type="text/css">
 input[type="text"],input[type="email"],textarea{
@@ -67,14 +152,10 @@ Website:</span><br>
 <input class="input" type="text" Name="Website" value="">
 <span class="Error">*<?php echo $WebsiteError; ?></span><br>
 <span class="FieldInfo">
-Comment:</span><br>
+Message:</span><br>
 <textarea Name="Comment" rows="5" cols="25"></textarea>
 <br>
 <br>
 <input type="Submit" Name="Submit" value="Submit">
    </fieldset>
 </form>
-
- 	
-	  <div class="clear"></div>	  	 
-	    

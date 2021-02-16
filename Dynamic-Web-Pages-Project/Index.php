@@ -158,8 +158,33 @@ background-color:#5D0580;
         </div>
         <!-- Main Area Content Area -->
         <div id="main">
-                       <div id="content">
-                        
+            <div id="content">
+
+            <?php 
+             $pageDir = "Pages Folder";
+                if(!empty($_GET['PageName'])){
+                $pageFolder = scandir($pageDir,0);
+                
+                unset($pageFolder[0],$pageFolder[1]);
+
+               // print_r($pageFolder);
+                
+                $pageName = $_GET['PageName'];
+
+                //echo $pageName;
+                if(in_array($pageName.'.php',$pageFolder)){
+                    include($pageDir.'/'.$pageName.'.php');
+            }else{
+            echo '<h1 id="request">You are lost</h1>';
+            echo '<img src="Images/Lost.gif" width="680" height="430">';
+            echo '<h2>Sorry, page not found</h2>';
+        }
+            }else{
+            include($pageDir.'/Home.php');
+        }
+
+
+            ?>
 
 	  <div class="clear"></div>	  	 
 
